@@ -17,6 +17,4 @@ env/
 .idea/
 .vscode/
 
-# Data and Results
-data/step*
-data/loftr_step*
+

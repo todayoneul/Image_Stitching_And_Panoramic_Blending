@@ -246,7 +246,7 @@ if __name__ == '__main__':
         cv.imshow(wnd_name, disp_vis)
         cv.waitKey(0)
         cv.destroyWindow(wnd_name)
-        cv.waitKey(1) # macOS GUI 이벤트 버그 방지용
+        cv.waitKey(1)
 
     # Crop black margins (Outer Bounding Box)
     non_black = np.argwhere(pano_alpha > 0)
@@ -285,4 +285,4 @@ if __name__ == '__main__':
     cv.imshow(f'Multi-Image Panorama ({len(cyl_images)} images)', disp_pano)
     cv.waitKey(0)
     cv.destroyAllWindows()
-    cv.waitKey(1) # macOS GUI 이벤트 버그 방지용
+    cv.waitKey(1) 
