@@ -8,9 +8,13 @@
 
 ### 파노라마 정합 결과 (최종 결과물)
 
+**[심화] LoFTR 딥러닝 파노라마 결과**
 ![최종 파노라마 결과 (LoFTR)](data/loftr_panorama_result.jpg)
-
 *(손떨림과 고스팅이 완벽히 제어된 고해상도 딥러닝 파노라마 결과물)*
+
+**[기본] BRISK 특징점 파노라마 결과**
+![최종 파노라마 결과 (BRISK)](data/panorama_result.jpg)
+*(전통적 방식으로도 Refinement와 Voronoi Seam 최적화를 거쳐 잔상 없이 선명하게 완성된 고품질 결과물)*
 
 ### 매칭 품질 비교 (BRISK vs LoFTR)
 
