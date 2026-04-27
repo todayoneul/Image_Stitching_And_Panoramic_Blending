@@ -2,7 +2,7 @@
 
 3장 이상의 다중 이미지를 원통형 좌표계(Cylindrical Projection)와 심화 블렌딩 기법을 활용하여 자연스러운 하나의 파노라마 이미지로 정합하는 컴퓨터 비전 스티칭 툴입니다. 
 
-기본적인 OpenCV 특징점 방식(BRISK)과 더불어 최신 딥러닝 방식(LoFTR)을 모두 지원하며, 파노라마 합성 시 흔히 발생하는 잔상(Ghosting)과 원근 왜곡을 원천 차단하기 위해 상용 소프트웨어 급의 심화 최적화 기법을 직접 구현(Custom Implementation)하여 적용했습니다.
+기본적인 OpenCV 특징점 방식(BRISK)과 더불어 최신 딥러닝 방식(LoFTR)을 모두 지원하며, 파노라마 합성 시 흔히 발생하는 잔상(Ghosting)과 원근 왜곡을 원천 차단하기 위해 상용 소프트웨어 급의 심화 최적화 기법을 직접 구현하여 적용했습니다.
 
 ## 데모 미리보기
 
@@ -42,7 +42,7 @@
 - **Cylindrical Projection (원통형 투영)**: 카메라를 Panning하며 찍은 다중 이미지들을 정합할 때, 양 끝 가장자리가 비정상적으로 늘어나는 렌즈 왜곡 현상을 방지합니다.
 - **딥러닝 특징점 매칭 (LoFTR)**: `main_loftr.py`에서 Transformer 구조를 활용한 매칭 모델을 적용하여 극강의 픽셀 단위 매칭 정확도를 보장합니다.
 - **RANSAC Least Squares Refinement (최소제곱 보정)**: RANSAC이 뽑은 단 4개의 가설 점만을 맹신하지 않고, 걸러진 **전체 정상 매칭점(Inliers)을 SVD 연산에 대입**하여 변환 행렬(Homography)을 한 번 더 깎고 다듬어 오차를 최소화합니다.
-- **Center-weighted Voronoi Seam Blending (심화 블렌딩)**: 겹침 구역을 50:50으로 넓게 평균내어 발생하는 잔상(Ghosting)을 막기 위해, 거리가 정확히 1:1로 만나는 **Voronoi Seam(경계선)**을 찾고 그 주변 30픽셀에만 얇은 Gaussian Blur를 씌워 티 나지 않게 잔상을 원천 파괴합니다.
+- **Center-weighted Voronoi Seam Blending (심화 블렌딩)**: 겹침 구역을 50:50으로 넓게 평균내어 발생하는 잔상(Ghosting)을 막기 위해, 거리가 정확히 1:1로 만나는 **Voronoi Seam(경계선)** 을 찾고 그 주변 30픽셀에만 얇은 Gaussian Blur를 씌워 티 나지 않게 잔상을 원천 파괴합니다.
 - **Auto Inner-Bounding Box Crop (자동 크롭 로직)**: 정합 완료 후 손떨림 궤적에 따라 삐뚤빼뚤해진 가장자리의 검은 여백을 감지하고, 네 방향에서 깔끔한 직사각형 뷰가 될 때까지 깎아 들어가는 `Inner Crop` 알고리즘을 자동 수행합니다.
 
 ## 요구 사항 (Requirements)
