@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# PyTorch
+*.pt
+*.pth
+
+# IDEs
+.idea/
+.vscode/
+
+# Data and Results
+data/step*
+data/loftr_step*
