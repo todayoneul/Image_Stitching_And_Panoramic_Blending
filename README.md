@@ -6,7 +6,18 @@
 
 ## 데모 미리보기
 
-### 파노라마 정합 결과 (최종 결과물)
+### 1. 입력 이미지 (원본 사진)
+
+스마트폰 등을 이용해 제자리에서 회전하며 분할 촬영한 원본 이미지들입니다. 이 4장의 사진들이 어떻게 하나의 완벽한 풍경으로 합쳐지는지 아래에서 확인해보세요.
+
+<p align="center">
+  <img src="data/IMG_1.JPG" width="24%">
+  <img src="data/IMG_2.JPG" width="24%">
+  <img src="data/IMG_3.JPG" width="24%">
+  <img src="data/IMG_04.JPG" width="24%">
+</p>
+
+### 2. 파노라마 정합 결과 (최종 결과물)
 
 **[심화] LoFTR 딥러닝 파노라마 결과**
 ![최종 파노라마 결과 (LoFTR)](data/loftr_panorama_result.jpg)
@@ -16,7 +27,7 @@
 ![최종 파노라마 결과 (BRISK)](data/panorama_result.jpg)
 *(전통적 방식으로도 Refinement와 Voronoi Seam 최적화를 거쳐 잔상 없이 선명하게 완성된 고품질 결과물)*
 
-### 매칭 품질 비교 (BRISK vs LoFTR)
+### 3. 매칭 품질 비교 (BRISK vs LoFTR)
 
 **[기본] OpenCV BRISK 특징점 매칭**
 ![BRISK 매칭 결과](data/step2_2_matches.jpg)
@@ -26,7 +37,7 @@
 ![LoFTR 매칭 결과](data/loftr_step2_2_matches.jpg)
 *(VRAM 메모리 최적화를 위해 640x480 저해상도로 연산하여 선의 개수는 적어 보이지만, 질감이 부족한 평야나 구름 영역까지 포함하여 이미지 전 영역에 걸쳐 구조적으로 균일하고(Uniform) 압도적인 신뢰도로 매칭된 모습)*
 
-### 단계별 파이프라인 시각화 (3-Step Visualization)
+### 4. 단계별 파이프라인 시각화 (3-Step Visualization)
 
 정합이 진행될 때마다 3단계 구조(원본 -> 매칭 -> 현재 캔버스)를 요약하여 보여줍니다.
 ![3단계 시각화 패널](data/loftr_step2_all_visualization.jpg)
