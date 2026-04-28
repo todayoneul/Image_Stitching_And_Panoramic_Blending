@@ -28,11 +28,15 @@
 초고해상도 이미지 여러 장을 하나의 거대한 캔버스로 합칠 때, 캔버스 전체 크기(예: 34000 x 15000 픽셀)에 대해 변환 좌표계를 생성하면 Out-Of-Memory가 발생하거나 디스크 스왑으로 인해 처리 시간이 걷잡을 수 없이 길어집니다.
 이를 해결하기 위해 변환될 소스 이미지가 대상 캔버스에 맺히는 바운딩 박스(Bounding Box)를 정확히 사전 예측하는 커스텀 `vectorized_warp` 엔진을 개발했습니다. 연산이 필요한 국소 영역(ROI)에만 좌표 그리드를 생성함으로써 메모리 점유율을 수백 배 낮추고 렌더링 속도를 비약적으로 끌어올렸습니다.
 
-## 실험 결과 및 데이터셋
+---
 
-### 1. 캠퍼스 풍경 (24MP 스마트폰 데이터셋)
-스마트폰으로 제자리에서 패닝하며 촬영한 2400만 화소 이미지 4장입니다. 중심점 기준 평면 투영이 적용되어 좌우의 형태 왜곡이 억제된 것을 확인할 수 있습니다.
+## 실험 결과 및 데이터셋 분석
 
+### 1. 캠퍼스 풍경 (data - 24MP 초고해상도)
+
+스마트폰으로 직접 촬영한 고해상도 이미지 셋입니다. 건물과 조형물의 직선 구조가 많아 정확한 Homography 추정이 필수적입니다.
+
+#### [Source] 원본 이미지 시퀀스
 <p align="center">
   <img src="data/IMG_1.JPG" width="24%">
   <img src="data/IMG_2.JPG" width="24%">
@@ -40,17 +44,59 @@
   <img src="data/IMG_04.JPG" width="24%">
 </p>
 
-**Center Reference 파노라마 결과 (LoFTR 기반)**
-![Campus Panorama Result](data/loftr_panorama_result.jpg)
+#### [Process] 단계별 정합 과정 시각화 (LoFTR 기반)
+파노라마 캔버스에 이미지가 순차적으로 누적되는 과정을 보여줍니다.
+<p align="center">
+  <img src="data/loftr_step1_all_visualization.jpg" width="49%">
+  <img src="data/loftr_step2_all_visualization.jpg" width="49%">
+</p>
 
-### 2. 산악 지형 데이터셋
-복잡한 자연물 텍스처와 형태를 알 수 없는 구름 영역이 다수 포함된 7장의 분할 이미지 셋입니다.
+#### [Results] 최종 결과 비교
 
-**딥러닝 매칭 파노라마 결과 (LoFTR 기반)**
-![Mountain LoFTR Panorama Result](data_mountain/loftr_panorama_result.jpg)
+**1. BRISK 기반 정합 결과**
+전통적인 특징점 방식으로 정합된 결과입니다.
+![BRISK Panorama](data/panorama_result.jpg)
 
-**전통적 매칭 파노라마 결과 (BRISK 기반)**
-![Mountain BRISK Panorama Result](data_mountain/panorama_result.jpg)
+**2. LoFTR 기반 정합 결과**
+딥러닝 기반의 최신 LoFTR 모델을 사용하여 정합된 결과입니다.
+![LoFTR Panorama](data/loftr_panorama_result.jpg)
+
+---
+
+### 2. 산악 지형 (data_mountain - 광활한 자연 경관)
+
+질감이 부족한 구름과 복잡한 바위 텍스처가 공존하는 고난도 데이터셋입니다.
+
+#### [Source] 원본 이미지 시퀀스 (총 7장)
+<p align="center">
+  <img src="data_mountain/100-0023_img.jpg" width="13%">
+  <img src="data_mountain/100-0024_img.jpg" width="13%">
+  <img src="data_mountain/100-0025_img.jpg" width="13%">
+  <img src="data_mountain/100-0038_img.jpg" width="13%">
+  <img src="data_mountain/100-0039_img.jpg" width="13%">
+  <img src="data_mountain/100-0040_img.jpg" width="13%">
+  <img src="data_mountain/101-0104_img.jpg" width="13%">
+</p>
+
+#### [Process] 특징점 매칭 품질 비교 (Step 6 기준)
+전통적 방식(BRISK)과 딥러닝 방식(LoFTR)의 매칭 신뢰도 차이를 확인할 수 있습니다.
+<p align="center">
+  <img src="data_mountain/step6_all_visualization.jpg" width="49%">
+  <img src="data_mountain/loftr_step6_all_visualization.jpg" width="49%">
+</p>
+*좌측(BRISK)은 바위 등 텍스처가 강한 곳에 집중되는 반면, 우측(LoFTR)은 이미지 전체 영역에 걸쳐 균일하게 매칭됩니다.*
+
+#### [Results] 최종 결과 비교
+
+**1. BRISK 기반 정합 결과**
+산악 지형의 특징점을 전통적인 방식으로 정합한 결과입니다.
+![Mountain BRISK Panorama](data_mountain/panorama_result.jpg)
+
+**2. LoFTR 기반 정합 결과**
+하늘의 구름 영역까지 딥러닝으로 정교하게 정합해낸 결과입니다.
+![Mountain LoFTR Panorama](data_mountain/loftr_panorama_result.jpg)
+
+---
 
 ## 실행 방법
 
@@ -61,13 +107,13 @@ pip install opencv-python numpy torch kornia
 ```
 
 ### 전통적 파이프라인 실행
-BRISK 특징점 기반의 스티칭 엔진을 실행합니다. 철저하게 CPU 연산에 최적화되어 있으며, 2400만 화소의 초고해상도 이미지 시퀀스도 10~15초 내외로 빠르게 처리합니다.
+BRISK 특징점 기반의 스티칭 엔진을 실행합니다. 철저하게 CPU 연산에 최적화되어 있으며, 2400만 화소의 초고해상도 이미지 시퀀스도 빠르게 처리합니다.
 ```bash
 python main.py
 ```
 
 ### 딥러닝 파이프라인 실행
-PyTorch와 Kornia 기반의 LoFTR 스티칭 엔진을 실행합니다. 최초 실행 시 사전 학습된 모델 가중치를 자동으로 다운로드합니다. macOS 환경에서는 `mps` 하드웨어 가속을 완벽하게 지원합니다.
+PyTorch와 Kornia 기반의 LoFTR 스티칭 엔진을 실행합니다. macOS 환경에서는 `mps` 하드웨어 가속을 완벽하게 지원합니다.
 ```bash
 python main_loftr.py
 ```
